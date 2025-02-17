@@ -61,7 +61,13 @@ class ModelModule(LightningModule):
         nbest_hyps = [h.asdict() for h in nbest_hyps[: min(len(nbest_hyps), 1)]]
         predicted_token_id = torch.tensor(list(map(int, nbest_hyps[0]["yseq"][1:])))
         predicted = self.text_transform.post_process(predicted_token_id).replace("<eos>", "")
-        return predicted
+        return predicted, enc_feat
+
+    def forward_encoder(self, sample):
+        x = self.model.frontend(sample)
+        x = self.model.proj_encoder(x)
+        enc_feat, _ = self.model.encoder(x, None)
+        return enc_feat
 
     def validation_step(self, batch, batch_idx):
         return self._step(batch, batch_idx, step_type="val")

@@ -8,3 +8,5 @@ outputs/
 *.pyc
 *.tar
 .DS_Store
+test_videos/
+*.pth
