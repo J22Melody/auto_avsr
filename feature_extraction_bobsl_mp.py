@@ -250,7 +250,9 @@ if __name__ == "__main__":
     if args.video_path:
         video_files = [args.video_path]
     else:
-        video_files = [os.path.join(args.video_dir, f) for f in os.listdir(args.video_dir) if f.endswith(".mp4")][:1000]
+        video_files = [os.path.join(args.video_dir, f) for f in os.listdir(args.video_dir) if f.endswith(".mp4")]
+        video_files = [video_file for video_file in video_files if not os.path.exists(os.path.join(args.save_dir, f"{get_base_filename(video_file)}.npy"))]
+        video_files = video_files[:15]
 
     print(f'Found {len(video_files)} videos.')
 
